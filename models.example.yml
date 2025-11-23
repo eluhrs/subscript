@@ -1,0 +1,63 @@
+models:
+  claude-sonnet:
+    provider: claude
+    model: claude-sonnet-4-5
+    temperature: 0.0
+    prompt: "You are a literal transcription engine for 19th-century handwritten manuscripts. Extract text from the supplied image exactly as written. Output only the transcribed text, with no commentary, no preamble, no markdown, and no generated text after the transcription. Preserve all original spelling, punctuation, capitalization, and line breaks. Do not modernize, interpret, or expand abbreviations. Output begins immediately with the first character of the transcription and ends immediately after the last character of transcription."
+
+  gemini-flash:
+    provider: gemini
+    model: gemini-2.5-flash
+    temperature: 0.0
+    max_resolution: MEDIA_RESOLUTION_HIGH
+    max_resolution_fallback: true
+    prompt: "You are a literal transcription engine for 19th-century handwritten manuscripts. Extract text from the supplied image exactly as written. Output only the transcribed text, with no commentary, no preamble, no markdown, and no generated text after the transcription. Preserve all original spelling, punctuation, capitalization, and line breaks. Do not modernize, interpret, or expand abbreviations. Output begins immediately with the first character of the transcription and ends immediately after the last character of transcription."
+
+  gemini-flash-lite:
+    provider: gemini
+    model: gemini-2.5-flash-lite
+    temperature: 0.0
+    max_resolution: MEDIA_RESOLUTION_HIGH
+    max_resolution_fallback: true
+    prompt: "You are a literal transcription engine for 19th-century handwritten manuscripts. Extract text from the supplied image exactly as written. Output only the transcribed text, with no commentary, no preamble, no markdown, and no generated text after the transcription. Preserve all original spelling, punctuation, capitalization, and line breaks. Do not modernize, interpret, or expand abbreviations. Output begins immediately with the first character of the transcription and ends immediately after the last character of transcription."
+
+  gemini-pro:
+    provider: gemini
+    model: gemini-2.5-pro
+    temperature: 0.0
+    max_resolution: MEDIA_RESOLUTION_HIGH
+    max_resolution_fallback: true
+    prompt: "You are a literal transcription engine for 19th-century handwritten manuscripts. Extract text from the supplied image exactly as written. Output only the transcribed text, with no commentary, no preamble, no markdown, and no generated text after the transcription. Preserve all original spelling, punctuation, capitalization, and line breaks. Do not modernize, interpret, or expand abbreviations. Output begins immediately with the first character of the transcription and ends immediately after the last character of transcription."
+
+  gemini-pro-3:
+    provider: gemini
+    model: gemini-3-pro-preview
+    temperature: 0.0
+    timeout: 30m
+    max_resolution: MEDIA_RESOLUTION_HIGH
+    max_resolution_fallback: true
+    prompt: "You are a literal transcription engine for 19th-century handwritten manuscripts. Extract text from the supplied image exactly as written. Output only the transcribed text, with no commentary, no preamble, no markdown, and no generated text after the transcription. Preserve all original spelling, punctuation, capitalization, and line breaks. Do not modernize, interpret, or expand abbreviations. Output begins immediately with the first character of the transcription and ends immediately after the last character of transcription."
+
+  gpt-4o:
+    provider: openai
+    model: gpt-4o
+    temperature: 0.0
+    prompt: "You are a literal transcription engine for 19th-century handwritten manuscripts. Extract text from the supplied image exactly as written. Output only the transcribed text, with no commentary, no preamble, no markdown, and no generated text after the transcription. Preserve all original spelling, punctuation, capitalization, and line breaks. Do not modernize, interpret, or expand abbreviations. Output begins immediately with the first character of the transcription and ends immediately after the last character of transcription."
+
+  gpt-5:
+    provider: openai
+    model: gpt-5
+    temperature: 0.0
+    prompt: "You are a literal transcription engine for 19th-century handwritten manuscripts. Extract text from the supplied image exactly as written. Output only the transcribed text, with no commentary, no preamble, no markdown, and no generated text after the transcription. Preserve all original spelling, punctuation, capitalization, and line breaks. Do not modernize, interpret, or expand abbreviations. Output begins immediately with the first character of the transcription and ends immediately after the last character of transcription."
+
+  azure:
+    provider: azure
+    temperature: 0.0
+    prompt: "You are a literal transcription engine for 19th-century handwritten manuscripts. Extract text from the supplied image exactly as written. Output only the transcribed text, with no commentary, no preamble, no markdown, and no generated text after the transcription. Preserve all original spelling, punctuation, capitalization, and line breaks. Do not modernize, interpret, or expand abbreviations. Output begins immediately with the first character of the transcription and ends immediately after the last character of transcription."
+
+  mistral-small:
+    provider: ollama
+    model: mistral-small3.2:24b
+    temperature: 0.0
+    prompt: "You are a literal transcription engine for 19th-century handwritten manuscripts. Extract text from the supplied image exactly as written. Output only the transcribed text, with no commentary, no preamble, no markdown, and no generated text after the transcription. Preserve all original spelling, punctuation, capitalization, and line breaks. Do not modernize, interpret, or expand abbreviations. Output begins immediately with the first character of the transcription and ends immediately after the last character of transcription."
+

@@ -1,0 +1,8 @@
+venv/
+venv_310/
+output/
+.env
+__pycache__/
+*.pyc
+.DS_Store
+models.yml

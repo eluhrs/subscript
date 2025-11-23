@@ -1,0 +1,7 @@
+kraken
+google-generativeai
+lxml
+reportlab
+Pillow
+PyYAML
+python-dotenv
