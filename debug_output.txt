@@ -1,0 +1,145 @@
+/Users/eluhrs/antigravity/scratch/subscript/venv/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+  warnings.warn(message, FutureWarning)
+Subscript 2.0 Initialized
+Processing 1 files...
+Processing sample.jpg...
+Segmenting sample.jpg with Kraken...
+Loading segmentation model from /Users/eluhrs/antigravity/scratch/subscript/venv/lib/python3.10/site-packages/kraken/blla.mlmodel...
+/Users/eluhrs/antigravity/scratch/subscript/venv/lib/python3.10/site-packages/coremltools/models/model.py:560: RuntimeWarning: You will not be able to run predict() on this Core ML model. Underlying exception message was: Error compiling model: "compiler error: Error reading protobuf spec. validator error: Input MLMultiArray to neural networks must have dimension 1 (vector) or 3 (image-like arrays).".
+  _warnings.warn(
+Segmenting sample.jpg
+Vectorizing regions
+Vectorizing regions
+Vectorizing baselines
+Compute reading order on 1 lines in lr direction
+Perform topological sort on partially ordered lines
+Compute reading order on 91 lines in lr direction
+Perform topological sort on partially ordered lines
+Compute reading order on 2 lines in lr direction
+Perform topological sort on partially ordered lines
+Found 92 lines.
+Initializing Gemini model: gemini-1.5-pro
+Annotating 92 regions for Visual Tagging...
+Saved annotated image to output/debug_annotated.jpg
+Sending annotated image to Gemini...
+Gemini Transcription Failed: 404 models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/Users/eluhrs/antigravity/scratch/subscript/modules/transcription.py", line 83, in transcribe
+    response = model.generate_content(
+  File "/Users/eluhrs/antigravity/scratch/subscript/venv/lib/python3.10/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+  File "/Users/eluhrs/antigravity/scratch/subscript/venv/lib/python3.10/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+  File "/Users/eluhrs/antigravity/scratch/subscript/venv/lib/python3.10/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "/Users/eluhrs/antigravity/scratch/subscript/venv/lib/python3.10/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+  File "/Users/eluhrs/antigravity/scratch/subscript/venv/lib/python3.10/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+  File "/Users/eluhrs/antigravity/scratch/subscript/venv/lib/python3.10/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/Users/eluhrs/antigravity/scratch/subscript/venv/lib/python3.10/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+  File "/Users/eluhrs/antigravity/scratch/subscript/venv/lib/python3.10/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+  File "/Users/eluhrs/antigravity/scratch/subscript/venv/lib/python3.10/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Saved TXT to output/sample.txt
+Saved PDF to output/sample.pdf
+DEBUG: GEMINI_API_KEY found: AIza...VV-U
+DEBUG: Exception caught: 404 models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+
+--- Results for sample.jpg ---
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]
+[Error: Transcription Failed]

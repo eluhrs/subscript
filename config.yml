@@ -4,10 +4,10 @@
 output_dir: "output"
 concurrency: 1 # Number of parallel files to process
 
-# --- Layout Analysis ---
-layout:
+# --- Segmentation Analysis ---
+segmentation:
   # Engine: 'google_vision' or 'kraken'
-  engine: "google_vision" 
+  engine: "kraken" 
   
   # Google Vision Settings
   google_vision:
@@ -24,7 +24,7 @@ transcription:
   
   # Gemini Settings
   gemini:
-    model: "gemini-1.5-pro"
+    model: "gemini-2.0-flash"
     prompt: |
       Transcribe this page exactly as written.
       Maintain original spelling and punctuation.

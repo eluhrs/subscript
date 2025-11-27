@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Tuple
 from PIL import Image
 
-class LayoutEngine(ABC):
+class SegmentationEngine(ABC):
     """
-    Abstract base class for layout analysis engines (e.g., Kraken, Google Vision).
+    Abstract base class for segmentation engines (e.g., Kraken, Google Vision).
     Responsible for detecting text regions/lines in an image.
     """
     @abstractmethod
@@ -25,7 +25,7 @@ class LayoutEngine(ABC):
         """
         pass
 
-class Transcriber(ABC):
+class TranscriptionEngine(ABC):
     """
     Abstract base class for transcription engines (e.g., Gemini, Google Vision).
     Responsible for converting image regions to text.
@@ -37,7 +37,7 @@ class Transcriber(ABC):
         
         Args:
             image: The full PIL Image object.
-            regions: List of region dicts (from LayoutEngine).
+            regions: List of region dicts (from SegmentationEngine).
             config: Configuration dictionary.
             
         Returns:
@@ -45,20 +45,20 @@ class Transcriber(ABC):
         """
         pass
 
-class PDFGenerator(ABC):
+class OutputEngine(ABC):
     """
-    Abstract base class for PDF generation.
-    Responsible for creating searchable/highlightable PDFs.
+    Abstract base class for output generation.
+    Responsible for creating PDF, TXT, XML files.
     """
     @abstractmethod
-    def generate(self, image_path: str, regions: List[Dict[str, Any]], output_path: str, config: Dict[str, Any]):
+    def generate(self, image_path: str, regions: List[Dict[str, Any]], output_dir: str, config: Dict[str, Any]):
         """
-        Generates a PDF from the image and transcribed regions.
+        Generates output files from the image and transcribed regions.
         
         Args:
             image_path: Path to the source image.
             regions: List of region dicts containing 'text' and coordinates.
-            output_path: Path to save the PDF.
+            output_dir: Directory to save outputs.
             config: Configuration dictionary.
         """
         pass

@@ -4,8 +4,8 @@
 output_dir: "output"
 concurrency: 1
 
-# --- Layout Analysis ---
-layout:
+# --- Segmentation Analysis ---
+segmentation:
   engine: "google_vision" # 'google_vision' or 'kraken'
   
   google_vision:
@@ -16,7 +16,7 @@ transcription:
   engine: "gemini" # 'google_vision' or 'gemini'
   
   gemini:
-    model: "gemini-1.5-pro"
+    model: "gemini-2.0-flash"
     prompt: "Transcribe this page exactly as written."
     generation_config:
       temperature: 0.0
