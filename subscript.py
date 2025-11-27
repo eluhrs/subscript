@@ -66,6 +66,7 @@ def main():
     parser.add_argument("input", nargs='+', help="Input image(s) (supports globs)")
     parser.add_argument("--config", default="config.yml", help="Path to config file")
     parser.add_argument("--segmentation", help="Override segmentation engine (e.g., kraken)")
+    parser.add_argument("--combine", help="Combine all output PDFs into a single file (e.g., combined.pdf)")
     args = parser.parse_args()
 
     config = load_config(args.config)
@@ -100,6 +101,8 @@ def main():
     logger.info(f"Processing {len(input_files)} files...")
 
     # Pipeline Loop
+    generated_pdfs = []
+    
     for image_path in input_files:
         logger.info(f"Processing {image_path}...")
         
@@ -116,6 +119,12 @@ def main():
             # 3. Output Generation
             output_engine.generate(image_path, regions, config.get('output_dir', 'output'), config)
             
+            # Collect PDF path if generated
+            base_name = os.path.splitext(os.path.basename(image_path))[0]
+            pdf_path = os.path.join(config.get('output_dir', 'output'), f"{base_name}.pdf")
+            if os.path.exists(pdf_path):
+                generated_pdfs.append(pdf_path)
+            
             # Temporary Output
             print(f"\n--- Results for {os.path.basename(image_path)} ---")
             for r in regions:
@@ -125,6 +134,12 @@ def main():
             logger.error(f"Failed to process {image_path}: {e}")
             import traceback
             traceback.print_exc()
+
+    # Combine PDFs if requested
+    if args.combine and generated_pdfs:
+        logger.info(f"Combining {len(generated_pdfs)} PDFs into {args.combine}...")
+        output_path = os.path.join(config.get('output_dir', 'output'), args.combine)
+        output_engine.combine_pdfs(generated_pdfs, output_path)
 
 if __name__ == "__main__":
     main()

@@ -76,3 +76,18 @@ class UnifiedOutputEngine(OutputEngine):
             logger.info(f"Saved PDF to {output_path}")
         except Exception as e:
             logger.error(f"Failed to generate PDF: {e}")
+
+    def combine_pdfs(self, pdf_paths: List[str], output_path: str):
+        """Combines multiple PDF files into a single PDF."""
+        try:
+            from pypdf import PdfWriter
+            
+            merger = PdfWriter()
+            for pdf in pdf_paths:
+                merger.append(pdf)
+            
+            merger.write(output_path)
+            merger.close()
+            logger.info(f"Saved Combined PDF to {output_path}")
+        except Exception as e:
+            logger.error(f"Failed to combine PDFs: {e}")

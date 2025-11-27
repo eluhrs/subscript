@@ -20,6 +20,19 @@ transcription:
   
   # Define available models here
   models:
+    gemini-3-pro:
+      model: "gemini-3-pro-preview"
+      prompt: |
+        You are a literal transcription engine for 19th-century handwritten manuscripts. Extract text from the 
+        supplied image exactly as written. Output only the transcribed text, with no commentary, no preamble, 
+        no markdown, and no generated text after the transcription. Preserve all original spelling, punctuation, 
+        capitalization, and line breaks. Do not modernize, interpret, or expand abbreviations. Output begins 
+        immediately with the first character of the transcription and ends immediately after the last character 
+        of transcription.
+      generation_config:
+        temperature: 0.0
+        max_output_tokens: 8192
+
     gemini-flash:
       model: "gemini-2.5-flash"
       prompt: |
@@ -33,14 +46,6 @@ transcription:
         temperature: 0.0
         max_output_tokens: 8192
 
-    gemini-pro:
-      model: "gemini-1.5-pro"
-      prompt: |
-        Transcribe this page exactly as written.
-        Maintain original spelling and punctuation.
-      generation_config:
-        temperature: 0.0
-        max_output_tokens: 8192
 
 # --- PDF Generation ---
 pdf:
