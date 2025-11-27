@@ -14,6 +14,10 @@ load_dotenv(override=True)
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
 
+# Suppress CoreML warnings
+import warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning, module="coremltools")
+
 def load_config(config_path):
     if not os.path.exists(config_path):
         logger.error(f"Config file not found: {config_path}")
@@ -102,8 +106,13 @@ def main():
 
     # Pipeline Loop
     generated_pdfs = []
+    import time
+    import datetime
+    
+    total_start_time = time.time()
     
     for image_path in input_files:
+        page_start_time = time.time()
         logger.info(f"Processing {image_path}...")
         
         try:
@@ -114,6 +123,8 @@ def main():
             from PIL import Image
             with Image.open(image_path) as im:
                 # Pass effective_config which contains the selected model settings
+                # Inject image_path for output naming
+                effective_config['image_path'] = image_path
                 regions = transcription_engine.transcribe(im, regions, effective_config)
             
             # 3. Output Generation
@@ -125,10 +136,17 @@ def main():
             if os.path.exists(pdf_path):
                 generated_pdfs.append(pdf_path)
             
-            # Temporary Output
-            print(f"\n--- Results for {os.path.basename(image_path)} ---")
+            # Calculate Page Time
+            page_end_time = time.time()
+            page_duration = page_end_time - page_start_time
+            page_duration_str = str(datetime.timedelta(seconds=int(page_duration)))
+            
+            # Formatted Output
+            print(f"\n-------- {args.model} output for {os.path.basename(image_path)} --------")
             for r in regions:
                 print(r.get('text', ''))
+            print("----------------------------------------------------")
+            print(f"Time: {page_duration_str}")
                 
         except Exception as e:
             logger.error(f"Failed to process {image_path}: {e}")
@@ -140,6 +158,12 @@ def main():
         logger.info(f"Combining {len(generated_pdfs)} PDFs into {args.combine}...")
         output_path = os.path.join(config.get('output_dir', 'output'), args.combine)
         output_engine.combine_pdfs(generated_pdfs, output_path)
+        
+        # Aggregate Statistics
+        total_end_time = time.time()
+        total_duration = total_end_time - total_start_time
+        total_duration_str = str(datetime.timedelta(seconds=int(total_duration)))
+        print(f"Total time: {total_duration_str}")
 
 if __name__ == "__main__":
     main()

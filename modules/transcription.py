@@ -52,8 +52,15 @@ class GeminiTranscription(TranscriptionEngine):
             # Store ID in region for mapping back
             region['visual_id'] = i + 1
 
-        # Save annotated image for debugging
-        debug_path = os.path.join(config.get('output_dir', 'output'), "debug_annotated.jpg")
+        # Save annotated image
+        image_path = config.get('image_path')
+        if image_path:
+            base_name = os.path.splitext(os.path.basename(image_path))[0]
+            debug_filename = f"{base_name}-segmented.jpg"
+        else:
+            debug_filename = "debug_annotated.jpg"
+            
+        debug_path = os.path.join(config.get('output_dir', 'output'), debug_filename)
         os.makedirs(os.path.dirname(debug_path), exist_ok=True)
         annotated_image.save(debug_path)
         logger.info(f"Saved annotated image to {debug_path}")
