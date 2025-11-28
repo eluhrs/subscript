@@ -16,7 +16,7 @@ class GeminiTranscription(TranscriptionEngine):
             raise ValueError("GEMINI_API_KEY environment variable not set.")
         genai.configure(api_key=api_key)
 
-    def transcribe(self, image: Image.Image, regions: List[Dict[str, Any]], config: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def transcribe(self, image: Image.Image, regions: List[Dict[str, Any]], config: Dict[str, Any]) -> tuple[List[Dict[str, Any]], Dict[str, int]]:
         gemini_config = config.get('transcription', {}).get('gemini', {})
         model_name = gemini_config.get('model', 'gemini-1.5-pro')
         base_prompt = gemini_config.get('prompt', 'Transcribe this text.')
@@ -108,11 +108,18 @@ class GeminiTranscription(TranscriptionEngine):
                 else:
                     logger.warning(f"Gemini did not return text for box {visual_id}")
                     region['text'] = ""
+            
+            # Extract usage metadata
+            usage_metadata = {
+                'prompt_token_count': response.usage_metadata.prompt_token_count,
+                'candidates_token_count': response.usage_metadata.candidates_token_count
+            }
                     
         except Exception as e:
             logger.error(f"Gemini Transcription Failed: {e}")
             # Fallback: Mark all as error
             for region in regions:
                 region['text'] = "[Error: Transcription Failed]"
+            usage_metadata = {'prompt_token_count': 0, 'candidates_token_count': 0}
                 
-        return regions
+        return regions, usage_metadata

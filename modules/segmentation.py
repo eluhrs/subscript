@@ -40,7 +40,16 @@ class KrakenSegmentation(SegmentationEngine):
         else:
              model_path = model_name
              
-        logger.info(f"Loading segmentation model from {model_path}...")
+        # Try to show relative path for cleaner logging
+        display_path = model_path
+        try:
+            rel_path = os.path.relpath(model_path)
+            if not rel_path.startswith('..'):
+                display_path = f"./{rel_path}"
+        except ValueError:
+            pass
+            
+        logger.info(f"Loading segmentation model from {display_path}...")
         model = vgsl.TorchVGSLModel.load_model(model_path)
         
         # Segment

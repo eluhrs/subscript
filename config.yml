@@ -6,21 +6,22 @@ concurrency: 1 # Number of parallel files to process
 
 # --- Segmentation Analysis ---
 segmentation:
-  # Engine: 'kraken' (default) or other future providers
-  engine: "kraken" 
+  default_segmentation: "historical-manuscript"
   
-  # Kraken Settings
-  kraken:
-    model: "default"
+  # Define available segmentation models
+  models:
+    historical-manuscript:
+      provider: "kraken"
+      model: "default"
 
 # --- Transcription ---
-# --- Transcription ---
 transcription:
-  engine: "gemini"
-  
+  default_model: "gemini-3-pro"
+
   # Define available models here
   models:
     gemini-3-pro:
+      provider: "gemini"
       model: "gemini-3-pro-preview"
       prompt: |
         You are a literal transcription engine for 19th-century handwritten manuscripts. Extract text from the 
@@ -32,8 +33,12 @@ transcription:
       generation_config:
         temperature: 0.0
         max_output_tokens: 8192
+      cost_config:
+        input_token_cost: 0.00000125 # Per token (example rate, adjust as needed)
+        output_token_cost: 0.00000375
 
     gemini-flash:
+      provider: "gemini"
       model: "gemini-2.5-flash"
       prompt: |
         You are a literal transcription engine for 19th-century handwritten manuscripts. Extract text from the 
@@ -45,10 +50,6 @@ transcription:
       generation_config:
         temperature: 0.0
         max_output_tokens: 8192
-
-
-# --- PDF Generation ---
-pdf:
-  output_format: "pdf" # 'pdf' or 'xml' or 'both'
-  font: "Helvetica"
-  font_size_multiplier: 1.0
+      cost_config:
+        input_token_cost: 0.000000075
+        output_token_cost: 0.0000003

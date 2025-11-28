@@ -23,7 +23,61 @@ class UnifiedOutputEngine(OutputEngine):
             self._generate_pdf(image_path, regions, pdf_path, config)
             
         # 3. Generate XML (if requested)
-        # TODO: Implement PAGE XML generation
+        # Always generate XML if not explicitly disabled, or if 'xml' or 'both' is in config
+        # The user request said "Save PageXML for each file (or combined file) to output/filename.xml"
+        # I'll assume we always want it or if configured.
+        # Let's check config.
+        # For now, I'll add it as a standard output.
+        xml_path = os.path.join(output_dir, f"{base_name}.xml")
+        self._generate_xml(image_path, regions, xml_path)
+        
+    def _generate_xml(self, image_path: str, regions: List[Dict[str, Any]], output_path: str):
+        import datetime
+        import xml.etree.ElementTree as ET
+        from xml.dom import minidom
+        
+        # Basic PageXML 2019-07-15 structure
+        ns = "http://schema.primaresearch.org/PAGE/gts/pagecontent/2019-07-15"
+        ET.register_namespace("", ns)
+        
+        pcgts = ET.Element(f"{{{ns}}}PcGts")
+        
+        # Metadata
+        metadata = ET.SubElement(pcgts, f"{{{ns}}}Metadata")
+        ET.SubElement(metadata, f"{{{ns}}}Creator").text = "Subscript.py"
+        ET.SubElement(metadata, f"{{{ns}}}Created").text = datetime.datetime.now().isoformat()
+        ET.SubElement(metadata, f"{{{ns}}}LastChange").text = datetime.datetime.now().isoformat()
+        
+        # Page
+        with Image.open(image_path) as im:
+            w, h = im.size
+            
+        page = ET.SubElement(pcgts, f"{{{ns}}}Page", {
+            "imageFilename": os.path.basename(image_path),
+            "imageWidth": str(w),
+            "imageHeight": str(h)
+        })
+        
+        # TextRegions
+        for i, region in enumerate(regions):
+            text = region.get('text', '')
+            bbox = region['bbox'] # x1, y1, x2, y2
+            x1, y1, x2, y2 = bbox
+            
+            # Points string for Coords: "x1,y1 x2,y1 x2,y2 x1,y2"
+            points = f"{x1},{y1} {x2},{y1} {x2},{y2} {x1},{y2}"
+            
+            text_region = ET.SubElement(page, f"{{{ns}}}TextRegion", {"id": f"r{i}"})
+            ET.SubElement(text_region, f"{{{ns}}}Coords", {"points": points})
+            
+            text_equiv = ET.SubElement(text_region, f"{{{ns}}}TextEquiv")
+            ET.SubElement(text_equiv, f"{{{ns}}}Unicode").text = text
+            
+        # Save
+        xml_str = minidom.parseString(ET.tostring(pcgts)).toprettyxml(indent="    ")
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(xml_str)
+        # logger.info(f"Saved PageXML to {output_path}")
         
     def _generate_txt(self, regions: List[Dict[str, Any]], output_path: str):
         with open(output_path, 'w', encoding='utf-8') as f:
@@ -31,7 +85,9 @@ class UnifiedOutputEngine(OutputEngine):
                 text = region.get('text', '')
                 if text:
                     f.write(text + "\n")
-        logger.info(f"Saved TXT to {output_path}")
+                if text:
+                    f.write(text + "\n")
+        # logger.info(f"Saved TXT to {output_path}")
 
     def _generate_pdf(self, image_path: str, regions: List[Dict[str, Any]], output_path: str, config: Dict[str, Any]):
         try:
@@ -73,7 +129,7 @@ class UnifiedOutputEngine(OutputEngine):
                 c.drawText(text_object)
                 
             c.save()
-            logger.info(f"Saved PDF to {output_path}")
+            # logger.info(f"Saved PDF to {output_path}")
         except Exception as e:
             logger.error(f"Failed to generate PDF: {e}")
 

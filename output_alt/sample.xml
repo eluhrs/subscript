@@ -1,0 +1,562 @@
+<?xml version="1.0" ?>
+<PcGts xmlns="http://schema.primaresearch.org/PAGE/gts/pagecontent/2019-07-15">
+    <Metadata>
+        <Creator>Subscript.py</Creator>
+        <Created>2025-11-27T23:07:10.558586</Created>
+        <LastChange>2025-11-27T23:07:10.558596</LastChange>
+    </Metadata>
+    <Page imageFilename="sample.jpg" imageWidth="2274" imageHeight="696">
+        <TextRegion id="r0">
+            <Coords points="203,490 217,490 217,512 203,512"/>
+            <TextEquiv>
+                <Unicode>.</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r1">
+            <Coords points="275,150 291,150 291,176 275,176"/>
+            <TextEquiv>
+                <Unicode>to</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r2">
+            <Coords points="305,141 445,141 445,180 305,180"/>
+            <TextEquiv>
+                <Unicode>to</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r3">
+            <Coords points="283,443 332,443 332,462 283,462"/>
+            <TextEquiv>
+                <Unicode>to</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r4">
+            <Coords points="349,341 363,341 363,363 349,363"/>
+            <TextEquiv>
+                <Unicode>as</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r5">
+            <Coords points="337,431 383,431 383,467 337,467"/>
+            <TextEquiv>
+                <Unicode>to</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r6">
+            <Coords points="446,334 467,334 467,365 446,365"/>
+            <TextEquiv>
+                <Unicode>to</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r7">
+            <Coords points="654,59 902,59 902,92 654,92"/>
+            <TextEquiv>
+                <Unicode>such</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r8">
+            <Coords points="635,112 680,112 680,130 635,130"/>
+            <TextEquiv>
+                <Unicode>as</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r9">
+            <Coords points="499,151 692,151 692,182 499,182"/>
+            <TextEquiv>
+                <Unicode>domestic</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r10">
+            <Coords points="276,242 573,242 573,279 276,279"/>
+            <TextEquiv>
+                <Unicode>through</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r11">
+            <Coords points="318,398 327,398 327,414 318,414"/>
+            <TextEquiv>
+                <Unicode>have</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r12">
+            <Coords points="403,336 411,336 411,366 403,366"/>
+            <TextEquiv>
+                <Unicode>as</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r13">
+            <Coords points="577,114 584,114 584,133 577,133"/>
+            <TextEquiv>
+                <Unicode>as</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r14">
+            <Coords points="504,332 512,332 512,364 504,364"/>
+            <TextEquiv>
+                <Unicode>as</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r15">
+            <Coords points="395,422 523,422 523,465 395,465"/>
+            <TextEquiv>
+                <Unicode>have</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r16">
+            <Coords points="616,239 636,239 636,282 616,282"/>
+            <TextEquiv>
+                <Unicode>your</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r17">
+            <Coords points="648,261 663,261 663,276 648,276"/>
+            <TextEquiv>
+                <Unicode>your</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r18">
+            <Coords points="706,164 776,164 776,184 706,184"/>
+            <TextEquiv>
+                <Unicode>.</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r19">
+            <Coords points="698,238 766,238 766,277 698,277"/>
+            <TextEquiv>
+                <Unicode>your</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r20">
+            <Coords points="557,298 701,298 701,317 557,317"/>
+            <TextEquiv>
+                <Unicode>your</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r21">
+            <Coords points="564,339 602,339 602,378 564,378"/>
+            <TextEquiv>
+                <Unicode>as</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r22">
+            <Coords points="606,344 631,344 631,373 606,373"/>
+            <TextEquiv>
+                <Unicode>as</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r23">
+            <Coords points="698,336 752,336 752,372 698,372"/>
+            <TextEquiv>
+                <Unicode>as</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r24">
+            <Coords points="1077,30 1176,30 1176,53 1077,53"/>
+            <TextEquiv>
+                <Unicode>articles</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r25">
+            <Coords points="929,53 1313,53 1313,94 929,94"/>
+            <TextEquiv>
+                <Unicode>articles</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r26">
+            <Coords points="786,148 1054,148 1054,184 786,184"/>
+            <TextEquiv>
+                <Unicode>News</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r27">
+            <Coords points="915,240 936,240 936,278 915,278"/>
+            <TextEquiv>
+                <Unicode>News</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r28">
+            <Coords points="955,243 1010,243 1010,266 955,266"/>
+            <TextEquiv>
+                <Unicode>News</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r29">
+            <Coords points="983,258 994,258 994,276 983,276"/>
+            <TextEquiv>
+                <Unicode>News</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r30">
+            <Coords points="1074,167 1081,167 1081,179 1074,179"/>
+            <TextEquiv>
+                <Unicode>as</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r31">
+            <Coords points="1089,144 1141,144 1141,182 1089,182"/>
+            <TextEquiv>
+                <Unicode>as</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r32">
+            <Coords points="1155,152 1207,152 1207,185 1155,185"/>
+            <TextEquiv>
+                <Unicode>as</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r33">
+            <Coords points="1075,228 1218,228 1218,271 1075,271"/>
+            <TextEquiv>
+                <Unicode>channel</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r34">
+            <Coords points="1035,297 1132,297 1132,325 1035,325"/>
+            <TextEquiv>
+                <Unicode>transmitting</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r35">
+            <Coords points="816,324 1098,324 1098,371 816,371"/>
+            <TextEquiv>
+                <Unicode>transmitting</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r36">
+            <Coords points="890,423 1191,423 1191,466 890,466"/>
+            <TextEquiv>
+                <Unicode>transmitting</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r37">
+            <Coords points="1229,248 1244,248 1244,274 1229,274"/>
+            <TextEquiv>
+                <Unicode>that</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r38">
+            <Coords points="1262,179 1285,179 1285,217 1262,217"/>
+            <TextEquiv>
+                <Unicode>that</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r39">
+            <Coords points="1337,148 1344,148 1344,179 1337,179"/>
+            <TextEquiv>
+                <Unicode>that</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r40">
+            <Coords points="1356,146 1372,146 1372,179 1356,179"/>
+            <TextEquiv>
+                <Unicode>that</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r41">
+            <Coords points="1426,50 1465,50 1465,85 1426,85"/>
+            <TextEquiv>
+                <Unicode>I</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r42">
+            <Coords points="1204,428 1265,428 1265,464 1204,464"/>
+            <TextEquiv>
+                <Unicode>d</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r43">
+            <Coords points="1356,346 1369,346 1369,373 1356,373"/>
+            <TextEquiv>
+                <Unicode>I</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r44">
+            <Coords points="1348,388 1374,388 1374,414 1348,414"/>
+            <TextEquiv>
+                <Unicode>I</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r45">
+            <Coords points="1489,64 1525,64 1525,85 1489,85"/>
+            <TextEquiv>
+                <Unicode>&amp;</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r46">
+            <Coords points="1378,147 1497,147 1497,185 1378,185"/>
+            <TextEquiv>
+                <Unicode>I</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r47">
+            <Coords points="1262,237 1440,237 1440,279 1262,279"/>
+            <TextEquiv>
+                <Unicode>may</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r48">
+            <Coords points="1258,348 1268,348 1268,370 1258,370"/>
+            <TextEquiv>
+                <Unicode>I</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r49">
+            <Coords points="1306,339 1313,339 1313,365 1306,365"/>
+            <TextEquiv>
+                <Unicode>should</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r50">
+            <Coords points="1392,392 1414,392 1414,411 1392,411"/>
+            <TextEquiv>
+                <Unicode>should</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r51">
+            <Coords points="1359,418 1414,418 1414,458 1359,458"/>
+            <TextEquiv>
+                <Unicode>should</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r52">
+            <Coords points="1446,198 1476,198 1476,216 1446,216"/>
+            <TextEquiv>
+                <Unicode>y</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r53">
+            <Coords points="1505,159 1529,159 1529,181 1505,181"/>
+            <TextEquiv>
+                <Unicode>a</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r54">
+            <Coords points="1449,329 1541,329 1541,365 1449,365"/>
+            <TextEquiv>
+                <Unicode>should</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r55">
+            <Coords points="1586,64 1605,64 1605,93 1586,93"/>
+            <TextEquiv>
+                <Unicode>J</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r56">
+            <Coords points="1555,149 1602,149 1602,182 1555,182"/>
+            <TextEquiv>
+                <Unicode>m</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r57">
+            <Coords points="1504,258 1582,258 1582,277 1504,277"/>
+            <TextEquiv>
+                <Unicode>a</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r58">
+            <Coords points="1466,431 1509,431 1509,457 1466,457"/>
+            <TextEquiv>
+                <Unicode>m</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r59">
+            <Coords points="1522,365 1531,365 1531,382 1522,382"/>
+            <TextEquiv>
+                <Unicode>be</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r60">
+            <Coords points="1606,239 1637,239 1637,276 1606,276"/>
+            <TextEquiv>
+                <Unicode>be</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r61">
+            <Coords points="1643,75 1658,75 1658,93 1643,93"/>
+            <TextEquiv>
+                <Unicode>o</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r62">
+            <Coords points="1644,156 1664,156 1664,179 1644,179"/>
+            <TextEquiv>
+                <Unicode>y</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r63">
+            <Coords points="1694,242 1707,242 1707,258 1694,258"/>
+            <TextEquiv>
+                <Unicode>be</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r64">
+            <Coords points="1721,63 1739,63 1739,84 1721,84"/>
+            <TextEquiv>
+                <Unicode>seph</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r65">
+            <Coords points="1563,330 1745,330 1745,373 1563,373"/>
+            <TextEquiv>
+                <Unicode>be</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r66">
+            <Coords points="1595,440 1612,440 1612,465 1595,465"/>
+            <TextEquiv>
+                <Unicode>e</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r67">
+            <Coords points="1753,152 1818,152 1818,180 1753,180"/>
+            <TextEquiv>
+                <Unicode>receive</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r68">
+            <Coords points="1757,348 1760,348 1760,367 1757,367"/>
+            <TextEquiv>
+                <Unicode>receive</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r69">
+            <Coords points="1830,105 1877,105 1877,120 1830,120"/>
+            <TextEquiv>
+                <Unicode>receive</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r70">
+            <Coords points="1863,150 1880,150 1880,175 1863,175"/>
+            <TextEquiv>
+                <Unicode>receive</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r71">
+            <Coords points="1777,238 1865,238 1865,274 1777,274"/>
+            <TextEquiv>
+                <Unicode>receive</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r72">
+            <Coords points="1781,344 1798,344 1798,368 1781,368"/>
+            <TextEquiv>
+                <Unicode>receive</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r73">
+            <Coords points="1803,340 1816,340 1816,362 1803,362"/>
+            <TextEquiv>
+                <Unicode>receive</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r74">
+            <Coords points="1732,428 1892,428 1892,469 1732,469"/>
+            <TextEquiv>
+                <Unicode>either</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r75">
+            <Coords points="1906,148 1934,148 1934,178 1906,178"/>
+            <TextEquiv>
+                <Unicode>either</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r76">
+            <Coords points="1944,67 1954,67 1954,89 1944,89"/>
+            <TextEquiv>
+                <Unicode>and</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r77">
+            <Coords points="2019,68 2030,68 2030,96 2019,96"/>
+            <TextEquiv>
+                <Unicode>and</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r78">
+            <Coords points="1946,143 2031,143 2031,182 1946,182"/>
+            <TextEquiv>
+                <Unicode>nd</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r79">
+            <Coords points="2038,61 2044,61 2044,89 2038,89"/>
+            <TextEquiv>
+                <Unicode>and</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r80">
+            <Coords points="1938,237 2047,237 2047,281 1938,281"/>
+            <TextEquiv>
+                <Unicode>these</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r81">
+            <Coords points="1954,326 1980,326 1980,365 1954,365"/>
+            <TextEquiv>
+                <Unicode>glad</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r82">
+            <Coords points="2069,55 2175,55 2175,95 2069,95"/>
+            <TextEquiv>
+                <Unicode>and</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r83">
+            <Coords points="2061,141 2152,141 2152,185 2061,185"/>
+            <TextEquiv>
+                <Unicode>nd</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r84">
+            <Coords points="1997,330 2107,330 2107,363 1997,363"/>
+            <TextEquiv>
+                <Unicode>glad</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r85">
+            <Coords points="1937,432 2025,432 2025,461 1937,461"/>
+            <TextEquiv>
+                <Unicode>by</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r86">
+            <Coords points="2134,95 2143,95 2143,117 2134,117"/>
+            <TextEquiv>
+                <Unicode>and</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r87">
+            <Coords points="2113,260 2127,260 2127,288 2113,288"/>
+            <TextEquiv>
+                <Unicode>these</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r88">
+            <Coords points="2126,339 2143,339 2143,364 2126,364"/>
+            <TextEquiv>
+                <Unicode>glad</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r89">
+            <Coords points="2192,291 2201,291 2201,305 2192,305"/>
+            <TextEquiv>
+                <Unicode>these</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r90">
+            <Coords points="1911,527 2211,527 2211,566 1911,566"/>
+            <TextEquiv>
+                <Unicode>letter</Unicode>
+            </TextEquiv>
+        </TextRegion>
+        <TextRegion id="r91">
+            <Coords points="2211,263 2239,263 2239,286 2211,286"/>
+            <TextEquiv>
+                <Unicode>these</Unicode>
+            </TextEquiv>
+        </TextRegion>
+    </Page>
+</PcGts>

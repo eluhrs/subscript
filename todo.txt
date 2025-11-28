@@ -1,0 +1,21 @@
+For the command output logging:
+
+- Either fix the following error or hide it from the command output:
+
+subscript % ./subscript.py gemini-3-pro input/mr-test?.jpg --combine mr-test.pdf
+/Users/eluhrs/antigravity/scratch/subscript/venv/lib/python3.10/site-packages/google/api_core/_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+  warnings.warn(message, FutureWarning)
+Subscript 2.0 Initialized (Model: gemini-3-pro)
+Processing 2 files...
+Processing input/mr-test1.jpg...
+Segmenting input/mr-test1.jpg with Kraken...
+
+- change “-------- gemini-3-pro output for mr-test2.jpg --------“ to “------------- gemini-3-pro output for mr-test2.jpg -------------“
+- change "----------------------------------------------------" to   "----------------------------------------------------------------"
+- add a blank line above the statistics
+- move the following log output lines to just before the statistics:
+
+Saved TXT to output/mr-test1.txt
+Saved PDF to output/mr-test1.pdf
+
+ 
