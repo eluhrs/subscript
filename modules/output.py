@@ -85,8 +85,6 @@ class UnifiedOutputEngine(OutputEngine):
                 text = region.get('text', '')
                 if text:
                     f.write(text + "\n")
-                if text:
-                    f.write(text + "\n")
         # logger.info(f"Saved TXT to {output_path}")
 
     def _generate_pdf(self, image_path: str, regions: List[Dict[str, Any]], output_path: str, config: Dict[str, Any]):
