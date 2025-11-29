@@ -1,11 +1,11 @@
-# Subscript.py: Full-page manuscript image to searchable PDF pipeline
+# Subscript HTR pipeline: image segmentation, transcription, and searchable PDF conversion
 
 A flexible tool for transcribing images of handwritten manuscript into searchable PDFs using a combination of **Kraken** (for layout analysis), **LLMs** (for handwriting recognition), and **ReportLab** (for PDF generation).
 
 This tool is designed to be accessible for Digital Humanities researchers while remaining hackable for developers.
 
 ## Features
--   **Hybrid Pipeline:** Uses Kraken's segmentation features to find lines of text, then send a numbered annotation map to a Generative AI model for high-accuracy transcription.
+-   **Hybrid Pipeline:** Uses Kraken's segmentation features to find lines of text, then send a numbered annotation map to a Generative AI model for high-accuracy transcription. Note that Kraken only works well with full-page images, not smaller fragments of paper.  Support for other segmentation providers may be added in the future.
 -   **Batch Processing:** Handle single images or glob patterns (e.g., `filename??.jpg` or `*.jpg`).
 -   **Combined Output:** Optionally combine multiple input images into a single PDF output file.
 -   **Searchable PDF Output:** Generates PDFs in which the image is visible, but the text is and searchable and selectable (invisible text layer).
@@ -34,6 +34,8 @@ This tool is designed to be accessible for Digital Humanities researchers while 
     ```bash
     # Create .env file
     echo "GEMINI_API_KEY=your_api_key_here" > .env
+    echo "OPENAI_API_KEY=your_api_key_here" >> .env
+    echo "ANTHROPIC_API_KEY=your_api_key_here" >> .env
     ```
 
 ## Usage
@@ -50,22 +52,22 @@ The main script is `subscript.py`. It should be run directly from the terminal.
 ### Examples
 **1. Transcribe a single image (using defaults):**
 ```bash
-./subscript.py my_page.jpg
+./subscript.py input/sample.jpg
 ```
 
 **2. Transcribe using a specific transcription model:**
 ```bash
-./subscript.py gemini-flash my_page.jpg
+./subscript.py gemini-flash input/sample.jpg
 ```
 
 **3. Transcribe using a specific segmentation model:**
 ```bash
-./subscript.py historical-manuscript my_page.jpg
+./subscript.py historical-manuscript input/sample.jpg
 ```
 
 **4. Transcribe using specific models for both:**
 ```bash
-./subscript.py historical-manuscript gemini-flash my_page.jpg
+./subscript.py historical-manuscript gemini-flash input/sample.jpg
 ```
 
 **5. Combine multiple images into one book:**
@@ -100,20 +102,20 @@ segmentation:
 
 # --- Transcription ---
 transcription:
-  default_model: "gemini-3-pro"
+  default_model: "gemini-pro-3"
 
   # Define available models here
   models:
-    gemini-3-pro:
+    gemini-pro-3:
       provider: "gemini"
       model: "gemini-3-pro-preview"
       prompt: "You are a literal transcription engine..."
-      generation_config:
-        temperature: 0.0
-        max_output_tokens: 8192
       cost_config:
         input_token_cost: 2.0
         output_token_cost: 12.0
+      API_passthrough: # provide model-specific settings below
+        temperature: 0.0
+        max_output_tokens: 8192
 ```
 
 ## License

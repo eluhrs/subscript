@@ -6,3 +6,5 @@ Pillow
 PyYAML
 python-dotenv
 pypdf
+openai
+anthropic

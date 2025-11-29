@@ -55,16 +55,25 @@ def get_transcription_engine(config, model_nickname):
     provider = model_config.get('provider', 'gemini')
     
     # Inject model config into the main config structure expected by the engine
+    effective_config = config.copy()
+    if 'transcription' not in effective_config:
+        effective_config['transcription'] = {}
+        
     if provider == 'gemini':
         from modules.transcription import GeminiTranscription
-        # Create a temporary config with the selected model settings merged in
-        # We'll pass this 'effective config' to the engine
-        effective_config = config.copy()
-        # Ensure the structure exists for the engine to read
-        if 'transcription' not in effective_config:
-            effective_config['transcription'] = {}
         effective_config['transcription']['gemini'] = model_config
         return GeminiTranscription(), effective_config
+        
+    elif provider == 'openai':
+        from modules.transcription import OpenAITranscription
+        effective_config['transcription']['openai'] = model_config
+        return OpenAITranscription(), effective_config
+        
+    elif provider == 'anthropic':
+        from modules.transcription import AnthropicTranscription
+        effective_config['transcription']['anthropic'] = model_config
+        return AnthropicTranscription(), effective_config
+        
     else:
         raise ValueError(f"Unknown transcription provider: {provider}")
 
@@ -74,7 +83,7 @@ def get_output_engine(config):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Subscript: Full-page manuscript image to searchable PDF pipeline\n\nusage: ./subscript.py [SEGMENTATION-NICKNAME] [MODEL-NICKNAME] INPUT [OPTIONS]",
+        description="Subscript HTR pipeline: image segmentation, transcription, and searchable PDF conversion\n\nusage: ./subscript.py [SEGMENTATION-NICKNAME] [MODEL-NICKNAME] INPUT [OPTIONS]",
         usage=argparse.SUPPRESS,
         formatter_class=argparse.RawTextHelpFormatter,
         add_help=False
@@ -252,11 +261,22 @@ def main():
             output_tokens = usage.get('candidates_token_count', 0)
             
             # Get cost rates from the specific model config we used
-            # effective_config has the merged settings
-            model_config = effective_config.get('transcription', {}).get('gemini', {})
+            # effective_config has the merged settings under the provider key
+            # We need to find which provider key was used.
+            # We can check effective_config['transcription'] for known keys
+            trans_conf = effective_config.get('transcription', {})
+            model_config = {}
+            if 'gemini' in trans_conf:
+                model_config = trans_conf['gemini']
+            elif 'openai' in trans_conf:
+                model_config = trans_conf['openai']
+            elif 'anthropic' in trans_conf:
+                model_config = trans_conf['anthropic']
+                
             cost_config = model_config.get('cost_config', {})
-            input_cost_rate = cost_config.get('input_token_cost', 0.0)
-            output_cost_rate = cost_config.get('output_token_cost', 0.0)
+            # Config now stores price per 1 Million tokens
+            input_cost_rate = cost_config.get('input_token_cost', 0.0) / 1_000_000
+            output_cost_rate = cost_config.get('output_token_cost', 0.0) / 1_000_000
             
             page_cost = (input_tokens * input_cost_rate) + (output_tokens * output_cost_rate)
             
