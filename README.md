@@ -83,6 +83,7 @@ The main script is `subscript.py`. It should be run directly from the terminal.
 | `--config` | Path to alternate config file (default: `./config.yml`). |
 | `--output` | Path to alternate output directory (default: `./output`). |
 | `--combine` | Combine multiple input images into specified PDF filename. |
+| `--nopdf` | Create TXT and XML files, but skip PDF output. |
 | `--prompt` | Override model prompt defined in `config.yml`. |
 | `--temp` | Override temperature defined in `./config.yml`. |
 

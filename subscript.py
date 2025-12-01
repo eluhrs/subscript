@@ -98,6 +98,7 @@ def main():
     parser.add_argument("--config", default="config.yml", metavar="", help="Path to alternate config file (default: ./config.yml)")
     parser.add_argument("--output", metavar="", help="Path to alternate output directory (default: ./output)")
     parser.add_argument("--combine", metavar="", help="Combine multiple input images into specified PDF filename")
+    parser.add_argument("--nopdf", action="store_true", help="Create TXT and XML files, but skip PDF output")
     parser.add_argument("--prompt", metavar="", help="Override system prompt defined in config.xml")
     parser.add_argument("--temp", type=float, metavar="", help="Override the temperature defined in config.xml")
     
@@ -173,6 +174,11 @@ def main():
     # CLI Override
     if args.output:
         config['output_dir'] = args.output
+        
+    if args.nopdf:
+        if 'pdf' not in config:
+            config['pdf'] = {}
+        config['pdf']['output_format'] = 'txt' # Disable PDF generation by setting format to something other than 'pdf' or 'both'
         
     # Model-specific overrides
     if selected_trans_model in config.get('transcription', {}).get('models', {}):
@@ -301,6 +307,8 @@ def main():
             
             if os.path.exists(pdf_path):
                 print(f"Saved PDF to {pdf_path}")
+            elif args.nopdf:
+                print("Skipped PDF creation by request")
 
             print("") # Blank line
             
