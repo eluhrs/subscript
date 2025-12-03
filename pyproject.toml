@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "subscript"
+version = "1.0.1"
+description = "Subscript HTR pipeline: image segmentation, transcription, and searchable PDF conversion"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+  {name = "Eric Luhrs", email = "eluhrs@dyn082146.dept.lehigh.edu"},
+]
+dependencies = [
+    "kraken>=6.0.0",
+    "google-generativeai",
+    "lxml",
+    "reportlab",
+    "Pillow",
+    "PyYAML",
+    "python-dotenv",
+    "pypdf",
+    "openai",
+    "anthropic"
+]
+
+[project.scripts]
+subscript = "subscript.__main__:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.package-data]
+subscript = ["config.yml"]

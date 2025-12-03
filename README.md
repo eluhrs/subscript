@@ -35,15 +35,38 @@ This tool is designed to be accessible for Digital Humanities researchers while 
     # Create .env file
     echo "GEMINI_API_KEY=your_api_key_here" > .env
     echo "OPENAI_API_KEY=your_api_key_here" >> .env
-    echo "ANTHROPIC_API_KEY=your_api_key_here" >> .env
-    ```
+### Option 1: Install as a Package (Recommended)
+This allows you to run `subscript` from any directory.
+
+```bash
+# Clone the repository
+git clone https://github.com/eluhrs/subscript.git
+cd subscript
+
+# Install
+pip install .
+
+# Or install directly from GitHub
+pip install git+https://github.com/eluhrs/subscript.git
+```
+
+### Option 2: Run Locally (Development)
+You can run the script directly from the repository root without installing.
+
+```bash
+./subscript.py ...
+```
 
 ## Usage
-The main script is `subscript.py`. It should be run directly from the terminal.
 
-### Basic Syntax
+### Command Line Interface
+If installed, use the `subscript` command. If running locally, use `./subscript.py`.
+
+**Note:** The tool operates relative to your **current working directory**. Input files, output directories, and `.env` files should be in the folder where you run the command.
+
 ```bash
-./subscript.py [SEGMENTATION-NICKNAME] [MODEL-NICKNAME] INPUT [OPTIONS]
+# Basic usage
+subscript [SEGMENTATION-MODEL] [TRANSCRIPTION-MODEL] [INPUT-FILE-OR-GLOB]
 ```
 -   **SEGMENTATION-NICKNAME**: (Optional) The nickname of the segmentation model to use (defined in `config.yml`), e.g., `historical-manuscript`. If omitted, the segmentation model defined as default is used.
 -   **MODEL-NICKNAME**: (Optional) The nickname of the transcription model to use (defined in `config.yml`), e.g., `gemini-flash`. If omitted, the transcription model defined as default is used.

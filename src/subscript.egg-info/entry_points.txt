@@ -1,0 +1,2 @@
+[console_scripts]
+subscript = subscript.__main__:main

@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+src/subscript/__init__.py
+src/subscript/__main__.py
+src/subscript.egg-info/PKG-INFO
+src/subscript.egg-info/SOURCES.txt
+src/subscript.egg-info/dependency_links.txt
+src/subscript.egg-info/entry_points.txt
+src/subscript.egg-info/requires.txt
+src/subscript.egg-info/top_level.txt
+src/subscript/modules/__init__.py
+src/subscript/modules/interfaces.py
+src/subscript/modules/output.py
+src/subscript/modules/segmentation.py
+src/subscript/modules/transcription.py

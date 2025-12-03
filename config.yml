@@ -23,8 +23,8 @@ transcription:
     debug_image: true       # Save filename-debug.jpg for debugging purposes
     resize_image: "large"   # constrain both dimension to 3000px (large), 2000px (medium), 1000px (small), or false
     contrast: 1.0           # Contrast factor (1.0 = no change)
-    binarize: false         # Apply Otsu's binarization (converts to grayscale first)
-    invert: false           # Invert colors (negative)
+    binarize: true          # Apply Otsu's binarization (converts to grayscale first)
+    invert: true            # Invert colors (negative)
 
   # Define available models here
   models:

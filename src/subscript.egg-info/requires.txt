@@ -1,0 +1,10 @@
+kraken>=6.0.0
+google-generativeai
+lxml
+reportlab
+Pillow
+PyYAML
+python-dotenv
+pypdf
+openai
+anthropic
