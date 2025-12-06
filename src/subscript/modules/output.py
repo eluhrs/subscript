@@ -69,12 +69,22 @@ class UnifiedOutputEngine(OutputEngine):
             
             text_region = ET.SubElement(page, f"{{{ns}}}TextRegion", {"id": f"r{i}"})
             ET.SubElement(text_region, f"{{{ns}}}Coords", {"points": points})
+
+            # Create a TextLine inside the TextRegion (1:1 mapping for line-based regions)
+            # This is required for nw-page-editor to support line selection correctly
+            text_line = ET.SubElement(text_region, f"{{{ns}}}TextLine", {"id": f"l{i}"})
+            ET.SubElement(text_line, f"{{{ns}}}Coords", {"points": points})
             
-            text_equiv = ET.SubElement(text_region, f"{{{ns}}}TextEquiv")
+            # Add Baseline (bottom edge of the box)
+            baseline_points = f"{x1},{y2} {x2},{y2}"
+            ET.SubElement(text_line, f"{{{ns}}}Baseline", {"points": baseline_points})
+            
+            text_equiv = ET.SubElement(text_line, f"{{{ns}}}TextEquiv")
             ET.SubElement(text_equiv, f"{{{ns}}}Unicode").text = text
             
         # Save
         xml_str = minidom.parseString(ET.tostring(pcgts)).toprettyxml(indent="    ")
+        
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(xml_str)
         # logger.info(f"Saved PageXML to {output_path}")
