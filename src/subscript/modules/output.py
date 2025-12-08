@@ -141,6 +141,99 @@ class UnifiedOutputEngine(OutputEngine):
         except Exception as e:
             logger.error(f"Failed to generate PDF: {e}")
 
+    def parse_xml_regions(self, xml_path: str) -> List[Dict[str, Any]]:
+        """
+        Parses a PageXML file and returns a list of text regions compatible with the OutputEngine.
+        This is used for the --onlypdf workflow where we skip segmentation/transcription.
+        """
+        import xml.etree.ElementTree as ET
+        
+        regions = []
+        try:
+            tree = ET.parse(xml_path)
+            root = tree.getroot()
+            # Handle namespaces usually present in PageXML
+            # e.g., {http://schema.primaresearch.org/PAGE/gts/pagecontent/2019-07-15}
+            # We can just ignore namespaces by repeatedly stripping {} or using generic findall
+            
+            # Helper to strip namespace from tag
+            def strip_ns(tag):
+                return tag.split('}', 1)[1] if '}' in tag else tag
+                
+            # Find all TextRegion or TextLine?
+            # Our output structure puts text in TextLine inside TextRegion.
+            # But standard PageXML might have text in TextRegion OR TextLine.
+            # Let's search for any element that has both Coords and TextEquiv/Unicode
+            
+            # Recursive search might be best, but let's iterate specifically for our known structure
+            # and fallback to generic scan.
+            
+            # Let's iterate over all elements and find those with TextEquiv/Unicode
+            for elem in root.iter():
+                # We are looking for regions or lines that have text
+                if strip_ns(elem.tag) in ['TextRegion', 'TextLine']:
+                    
+                    # Get Text
+                    text = ""
+                    text_equiv = None
+                    for child in elem:
+                        if strip_ns(child.tag) == 'TextEquiv':
+                            text_equiv = child
+                            break
+                    
+                    if text_equiv is not None:
+                        for child in text_equiv:
+                            if strip_ns(child.tag) == 'Unicode':
+                                text = child.text
+                                break
+                    
+                    # If no text, we might skip, but regions sometimes are empty placeholders.
+                    # For PDF gen, empty text means nothing to draw.
+                    if not text:
+                        continue
+                        
+                    # Get Coords
+                    coords_str = ""
+                    for child in elem:
+                        if strip_ns(child.tag) == 'Coords':
+                            coords_str = child.get('points')
+                            break
+                            
+                    if not coords_str:
+                        continue
+                        
+                    # Parse Coords "x1,y1 x2,y2 ..."
+                    points = []
+                    try:
+                        pairs = coords_str.strip().split(' ')
+                        for pair in pairs:
+                            x, y = map(int, pair.split(','))
+                            points.append((x, y))
+                    except ValueError:
+                        # Malformed points
+                        continue
+                        
+                    if not points:
+                        continue
+                        
+                    # Calculate BBox (min_x, min_y, max_x, max_y)
+                    xs = [p[0] for p in points]
+                    ys = [p[1] for p in points]
+                    bbox = (min(xs), min(ys), max(xs), max(ys))
+                    
+                    regions.append({
+                        'text': text,
+                        'bbox': bbox,
+                        'source_id': elem.get('id')
+                    })
+                    
+            logger.info(f"Parsed {len(regions)} text regions from {xml_path}")
+            return regions
+            
+        except Exception as e:
+            logger.error(f"Failed to parse XML {xml_path}: {e}")
+            return []
+
     def combine_pdfs(self, pdf_paths: List[str], output_path: str):
         """Combines multiple PDF files into a single PDF."""
         try:

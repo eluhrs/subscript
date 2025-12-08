@@ -115,6 +115,7 @@ def main():
     parser.add_argument("--output", metavar="", help="Path to alternate output directory (default: ./output)")
     parser.add_argument("--combine", metavar="", help="Combine multiple input images into specified PDF filename")
     parser.add_argument("--nopdf", action="store_true", help="Create TXT and XML files, but skip PDF output")
+    parser.add_argument("--onlypdf", action="store_true", help="Skip segmentation/transcription, use existing XML to generate PDF")
     parser.add_argument("--prompt", metavar="", help="Override system prompt defined in config.xml")
     parser.add_argument("--temp", type=float, metavar="", help="Override the temperature defined in config.xml")
     
@@ -256,19 +257,43 @@ def main():
         
         try:
             # 1. Segmentation
-            seg_start = time.time()
-            regions = segmentation_engine.analyze(image_path, config)
-            seg_duration = time.time() - seg_start
+            if args.onlypdf:
+                # SKIP Segmentation and Transcription
+                # Determine XML path
+                # Try 1: Next to image (input dir)
+                base_name = os.path.splitext(os.path.basename(image_path))[0]
+                xml_path = os.path.splitext(image_path)[0] + ".xml"
+                
+                if not os.path.exists(xml_path):
+                    # Try 2: Output dir
+                    xml_path = os.path.join(config.get('output_dir', 'output'), f"{base_name}.xml")
+                    
+                if not os.path.exists(xml_path):
+                    logger.error(f"XML file not found for --onlypdf mode. Checked:\n  {os.path.splitext(image_path)[0]}.xml\n  {xml_path}")
+                    continue
+                    
+                logger.info(f"Using existing XML: {xml_path}")
+                regions = output_engine.parse_xml_regions(xml_path)
+                usage = {} # No usage
+                seg_duration = 0
+                trans_duration = 0
+                
+            else:
+                # Normal Flow
+                seg_start = time.time()
+                regions = segmentation_engine.analyze(image_path, config)
+                seg_duration = time.time() - seg_start
             
             # 2. Transcription
-            trans_start = time.time()
-            from PIL import Image
-            with Image.open(image_path) as im:
-                # Pass effective_config which contains the selected model settings
-                # Inject image_path for output naming
-                effective_config['image_path'] = image_path
-                regions, usage = transcription_engine.transcribe(im, regions, effective_config)
-            trans_duration = time.time() - trans_start
+            if not args.onlypdf:
+                trans_start = time.time()
+                from PIL import Image
+                with Image.open(image_path) as im:
+                    # Pass effective_config which contains the selected model settings
+                    # Inject image_path for output naming
+                    effective_config['image_path'] = image_path
+                    regions, usage = transcription_engine.transcribe(im, regions, effective_config)
+                trans_duration = time.time() - trans_start
             
             # 3. Output Generation
             out_start = time.time()
