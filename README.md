@@ -107,6 +107,7 @@ subscript [SEGMENTATION-MODEL] [TRANSCRIPTION-MODEL] [INPUT-FILE-OR-GLOB]
 | `--output` | Path to alternate output directory (default: `./output`). |
 | `--combine` | Combine multiple input images into specified PDF filename. |
 | `--nopdf` | Create TXT and XML files, but skip PDF output. |
+| `--onlypdf` | Skip segmentation/transcription, use existing XML to generate PDF (Cost $0.0). |
 | `--prompt` | Override model prompt defined in `config.yml`. |
 | `--temp` | Override temperature defined in `./config.yml`. |
 
