@@ -100,16 +100,23 @@ subscript [SEGMENTATION-MODEL] [TRANSCRIPTION-MODEL] [INPUT-FILE-OR-GLOB]
 *Output: `output/my_filename.pdf` and `output/my_filename.txt` (all pages)*
 
 ### Options
-| Flag | Description |
-| :--- | :--- |
-| `--help` | Show this help message and exit. |
-| `--config` | Path to alternate config file (default: `./config.yml`). |
-| `--output` | Path to alternate output directory (default: `./output`). |
-| `--combine` | Combine multiple input images into specified PDF filename. |
-| `--nopdf` | Create TXT and XML files, but skip PDF output. |
-| `--onlypdf` | Skip segmentation/transcription, use existing XML to generate PDF (Cost $0.0). |
-| `--prompt` | Override model prompt defined in `config.yml`. |
-| `--temp` | Override temperature defined in `./config.yml`. |
+- `--help`: Show this help message and exit.
+- `--config [path]`: Path to an alternate config file (default: `./config.yml`).
+
+- **Transcription Overrides**:
+  - `--prompt "Your custom prompt"`: Override the system prompt for the transcription model.
+  - `--temp 0.5`: Override the temperature (creativity) of the model.
+
+- **Preprocessing Overrides**:
+  - `--resize [large|medium|small|false]`: Resize the input image before processing to save tokens/cost.
+  - `--contrast [float]`: Adjust contrast (1.0 = original, <1.0 lower, >1.0 higher).
+  - `--binarize`: Apply Otsu binarization to the image.
+  - `--invert`: Invert image colors (useful for negative scans).
+
+- **PDF Generation**:
+  - `--nopdf`: Skip PDF generation (only TXT/XML).
+  - `--combine output.pdf`: Combine multiple input images into a single PDF.
+  - `--onlypdf`: Skip segmentation/transcription and rebuild PDF from existing XML.
 
 ## Configuration (config.yml)
 The `config.yml` file defines the available models, segmentation providers, and their default settings.

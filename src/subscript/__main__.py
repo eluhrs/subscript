@@ -119,6 +119,12 @@ def main():
     parser.add_argument("--prompt", metavar="", help="Override system prompt defined in config.xml")
     parser.add_argument("--temp", type=float, metavar="", help="Override the temperature defined in config.xml")
     
+    # Preprocessing Overrides
+    parser.add_argument("--resize", choices=['large', 'medium', 'small', 'false'], help="Resize input image before processing")
+    parser.add_argument("--contrast", type=float, metavar="", help="Adjust contrast (1.0 = original, <1.0 lower, >1.0 higher)")
+    parser.add_argument("--binarize", action="store_true", help="Apply Otsu binarization")
+    parser.add_argument("--invert", action="store_true", help="Invert image colors")
+    
     # Add blank line before help output
     if '--help' in sys.argv or '-h' in sys.argv:
         print("")
@@ -213,7 +219,27 @@ def main():
         if args.temp is not None:
             if 'generation_config' not in model_config:
                 model_config['generation_config'] = {}
+            if 'generation_config' not in model_config:
+                model_config['generation_config'] = {}
             model_config['generation_config']['temperature'] = args.temp
+            
+    # Preprocessing Overrides
+    if args.resize or args.contrast is not None or args.binarize or args.invert:
+        if 'transcription' not in config:
+            config['transcription'] = {}
+        if 'preprocessing' not in config['transcription']:
+            config['transcription']['preprocessing'] = {}
+            
+        prep = config['transcription']['preprocessing']
+        
+        if args.resize:
+            prep['resize_image'] = args.resize
+        if args.contrast is not None:
+            prep['contrast'] = args.contrast
+        if args.binarize:
+            prep['binarize'] = True
+        if args.invert:
+            prep['invert'] = True
     
     # Expand Globs
     input_files = []
