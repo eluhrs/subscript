@@ -217,11 +217,9 @@ def main():
             model_config['prompt'] = args.prompt
             
         if args.temp is not None:
-            if 'generation_config' not in model_config:
-                model_config['generation_config'] = {}
-            if 'generation_config' not in model_config:
-                model_config['generation_config'] = {}
-            model_config['generation_config']['temperature'] = args.temp
+            if 'API_passthrough' not in model_config:
+                model_config['API_passthrough'] = {}
+            model_config['API_passthrough']['temperature'] = args.temp
             
     # Preprocessing Overrides
     if args.resize or args.contrast is not None or args.binarize or args.invert:
@@ -264,6 +262,48 @@ def main():
 
     logger.info(f"\nSubscript.py initialized segmentation provider: {selected_seg_model}")
     logger.info(f"Subscript.py Initialized transcription provider: {selected_trans_model}")
+    
+    # --- Configuration Manifest ---
+    logger.info("="*60)
+    logger.info("SUBSCRIPT CONFIGURATION MANIFEST")
+    logger.info("="*60)
+    logger.info(f"Target Input:       {len(input_files)} files")
+    logger.info(f"Output Directory:   {os.path.abspath(config.get('output_dir', 'output'))}")
+    logger.info("-" * 40)
+    logger.info(f"Segmentation Model: {selected_seg_model}")
+    logger.info("-" * 40)
+    logger.info(f"Transcription Model: {selected_trans_model}")
+    
+    # Extract effective settings
+    # effective_config already has the merged model config under the provider key (e.g. ['transcription']['gemini'])
+    trans_conf = effective_config.get('transcription', {})
+    active_conf = {}
+    # Determine which provider key to look at based on the selected model config in 'config'
+    sel_mod_conf = config.get('transcription', {}).get('models', {}).get(selected_trans_model, {})
+    provider = sel_mod_conf.get('provider', 'gemini')
+    
+    if provider in trans_conf:
+        active_conf = trans_conf[provider]
+    
+    logger.info(f"  Provider:         {provider}")
+    logger.info(f"  Model Name:       {active_conf.get('model', 'unknown')}")
+    prompt_snip = active_conf.get('prompt', 'default').replace('\n', ' ')
+    logger.info(f"  Prompt:           {prompt_snip[:50]}...")
+    
+    # Check API_passthrough for temp
+    api_pass = active_conf.get('API_passthrough', {})
+    logger.info(f"  Temperature:      {api_pass.get('temperature', 'default')}")
+    
+    logger.info("-" * 40)
+    logger.info("Preprocessing Settings:")
+    prep = trans_conf.get('preprocessing', {})
+    if not prep or all(v is False for v in prep.values()):
+        logger.info("  (None or Defaults)")
+    else:
+        for k, v in prep.items():
+            logger.info(f"  {k}: {v}")
+    logger.info("="*60)
+    
     logger.info(f"Processing {len(input_files)} files...")
 
     # Pipeline Loop
