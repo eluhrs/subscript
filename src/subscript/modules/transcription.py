@@ -4,7 +4,8 @@ import json
 import re
 from typing import List, Dict, Any
 from PIL import Image, ImageDraw, ImageFont
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from .interfaces import TranscriptionEngine
 
 logger = logging.getLogger(__name__)
@@ -106,18 +107,18 @@ def preprocess_image(image: Image.Image, config: Dict[str, Any]) -> Image.Image:
 
 class GeminiTranscription(TranscriptionEngine):
     def __init__(self):
-        api_key = os.environ.get("GEMINI_API_KEY")
-        if not api_key:
+        self.api_key = os.environ.get("GEMINI_API_KEY")
+        if not self.api_key:
             raise ValueError("GEMINI_API_KEY environment variable not set.")
-        genai.configure(api_key=api_key)
+        # Initialize Client
+        self.client = genai.Client(api_key=self.api_key)
 
     def transcribe(self, image: Image.Image, regions: List[Dict[str, Any]], config: Dict[str, Any]) -> tuple[List[Dict[str, Any]], Dict[str, int]]:
         gemini_config = config.get('transcription', {}).get('gemini', {})
         model_name = gemini_config.get('model', 'gemini-1.5-pro')
         base_prompt = gemini_config.get('prompt', 'Transcribe this text.')
         
-        logger.info(f"Initializing Gemini model: {model_name}")
-        model = genai.GenerativeModel(model_name)
+        logger.info(f"Using Gemini model (google.genai): {model_name}")
         
         # 0. Preprocess Image
         image = preprocess_image(image, config)
@@ -175,8 +176,6 @@ class GeminiTranscription(TranscriptionEngine):
             "Do not include any markdown formatting (like ```json). Just the raw JSON string."
         )
         
-        full_prompt = [system_prompt, base_prompt, annotated_image]
-        
         # 3. Call Gemini
         logger.info("Sending annotated image to Gemini...")
         try:
@@ -184,19 +183,21 @@ class GeminiTranscription(TranscriptionEngine):
             user_gen_config = gemini_config.get('API_passthrough', {})
             
             # Ensure critical settings are preserved/set
-            # We enforce JSON output for this pipeline to work
             user_gen_config['response_mime_type'] = "application/json"
             
             # Set default temperature if not provided
             if 'temperature' not in user_gen_config:
                 user_gen_config['temperature'] = 0.0
                 
-            # Unpack into GenerationConfig
-            gen_config = genai.types.GenerationConfig(**user_gen_config)
+            # Create Config Object using new types
+            gen_config = types.GenerateContentConfig(**user_gen_config)
             
-            response = model.generate_content(
-                full_prompt,
-                generation_config=gen_config
+            # Pass contents as list of [system_prompt, base_prompt, image]
+            # google.genai Client accepts PIL images directly in contents
+            response = self.client.models.generate_content(
+                model=model_name,
+                contents=[system_prompt, base_prompt, annotated_image],
+                config=gen_config
             )
             
             raw_text = response.text.strip()
@@ -219,9 +220,16 @@ class GeminiTranscription(TranscriptionEngine):
                     region['text'] = ""
             
             # Extract usage metadata
+            # Check structure of usage_metadata in new SDK (it might vary, wrap in try/get)
+            p_tok = 0
+            c_tok = 0
+            if response.usage_metadata:
+                 p_tok = response.usage_metadata.prompt_token_count or 0
+                 c_tok = response.usage_metadata.candidates_token_count or 0
+
             usage_metadata = {
-                'prompt_token_count': response.usage_metadata.prompt_token_count,
-                'candidates_token_count': response.usage_metadata.candidates_token_count
+                'prompt_token_count': p_tok,
+                'candidates_token_count': c_tok
             }
                     
         except Exception as e:

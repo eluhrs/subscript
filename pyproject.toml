@@ -14,7 +14,7 @@ authors = [
 ]
 dependencies = [
     "kraken>=6.0.0",
-    "google-generativeai",
+    "google-genai",
     "lxml",
     "reportlab",
     "Pillow",
