@@ -115,10 +115,33 @@ class GeminiTranscription(TranscriptionEngine):
         if not self.api_key:
             raise ValueError("GEMINI_API_KEY environment variable not set.")
         # Initialize Client
-        self.client = genai.Client(api_key=self.api_key)
+        # We start with default (gRPC) or env-var based. 
+        # It can be overridden in transcribe() based on config.yml
+        transport = os.environ.get("GEMINI_TRANSPORT", "grpc")
+        self.transport = transport
+        self._init_client(transport)
+
+    def _init_client(self, transport: str):
+        http_options = {}
+        if transport.lower() == 'rest':
+            http_options = {'transport': 'rest'}
+            logger.info(f"Gemini Client initialized with REST transport.")
+        else:
+            logger.info(f"Gemini Client initialized with default transport (gRPC).")
+        
+        self.client = genai.Client(api_key=self.api_key, http_options=http_options)
 
     def transcribe(self, image: Image.Image, regions: List[Dict[str, Any]], config: Dict[str, Any]) -> tuple[List[Dict[str, Any]], Dict[str, int]]:
         gemini_config = config.get('transcription', {}).get('gemini', {})
+        
+        # Check for transport override in config
+        config_transport = gemini_config.get('transport')
+        if config_transport and config_transport != self.transport:
+            logger.info(f"re-initializing Gemini client with transport: {config_transport}")
+            self.transport = config_transport
+            self._init_client(config_transport)
+            
+        model_name = gemini_config.get('model', 'gemini-1.5-pro')
         model_name = gemini_config.get('model', 'gemini-1.5-pro')
         base_prompt = gemini_config.get('prompt', 'Transcribe this text.')
         

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "subscript"
-version = "1.4.0"
+version = "1.4.1"
 description = "Subscript HTR pipeline: image segmentation, transcription, and searchable PDF conversion"
 readme = "README.md"
 requires-python = ">=3.8"
