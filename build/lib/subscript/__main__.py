@@ -115,8 +115,15 @@ def main():
     parser.add_argument("--output", metavar="", help="Path to alternate output directory (default: ./output)")
     parser.add_argument("--combine", metavar="", help="Combine multiple input images into specified PDF filename")
     parser.add_argument("--nopdf", action="store_true", help="Create TXT and XML files, but skip PDF output")
+    parser.add_argument("--onlypdf", action="store_true", help="Skip segmentation/transcription, use existing XML to generate PDF")
     parser.add_argument("--prompt", metavar="", help="Override system prompt defined in config.xml")
     parser.add_argument("--temp", type=float, metavar="", help="Override the temperature defined in config.xml")
+    
+    # Preprocessing Overrides
+    parser.add_argument("--resize", choices=['large', 'medium', 'small', 'false'], help="Resize input image before processing")
+    parser.add_argument("--contrast", type=float, metavar="", help="Adjust contrast (1.0 = original, <1.0 lower, >1.0 higher)")
+    parser.add_argument("--binarize", action="store_true", help="Apply Otsu binarization")
+    parser.add_argument("--invert", action="store_true", help="Invert image colors")
     
     # Add blank line before help output
     if '--help' in sys.argv or '-h' in sys.argv:
@@ -210,9 +217,27 @@ def main():
             model_config['prompt'] = args.prompt
             
         if args.temp is not None:
-            if 'generation_config' not in model_config:
-                model_config['generation_config'] = {}
-            model_config['generation_config']['temperature'] = args.temp
+            if 'API_passthrough' not in model_config:
+                model_config['API_passthrough'] = {}
+            model_config['API_passthrough']['temperature'] = args.temp
+            
+    # Preprocessing Overrides
+    if args.resize or args.contrast is not None or args.binarize or args.invert:
+        if 'transcription' not in config:
+            config['transcription'] = {}
+        if 'preprocessing' not in config['transcription']:
+            config['transcription']['preprocessing'] = {}
+            
+        prep = config['transcription']['preprocessing']
+        
+        if args.resize:
+            prep['resize_image'] = args.resize
+        if args.contrast is not None:
+            prep['contrast'] = args.contrast
+        if args.binarize:
+            prep['binarize'] = True
+        if args.invert:
+            prep['invert'] = True
     
     # Expand Globs
     input_files = []
@@ -237,6 +262,48 @@ def main():
 
     logger.info(f"\nSubscript.py initialized segmentation provider: {selected_seg_model}")
     logger.info(f"Subscript.py Initialized transcription provider: {selected_trans_model}")
+    
+    # --- Configuration Manifest ---
+    logger.info("="*60)
+    logger.info("SUBSCRIPT CONFIGURATION MANIFEST")
+    logger.info("="*60)
+    logger.info(f"Target Input:       {len(input_files)} files")
+    logger.info(f"Output Directory:   {os.path.abspath(config.get('output_dir', 'output'))}")
+    logger.info("-" * 40)
+    logger.info(f"Segmentation Model: {selected_seg_model}")
+    logger.info("-" * 40)
+    logger.info(f"Transcription Model: {selected_trans_model}")
+    
+    # Extract effective settings
+    # effective_config already has the merged model config under the provider key (e.g. ['transcription']['gemini'])
+    trans_conf = effective_config.get('transcription', {})
+    active_conf = {}
+    # Determine which provider key to look at based on the selected model config in 'config'
+    sel_mod_conf = config.get('transcription', {}).get('models', {}).get(selected_trans_model, {})
+    provider = sel_mod_conf.get('provider', 'gemini')
+    
+    if provider in trans_conf:
+        active_conf = trans_conf[provider]
+    
+    logger.info(f"  Provider:         {provider}")
+    logger.info(f"  Model Name:       {active_conf.get('model', 'unknown')}")
+    prompt_snip = active_conf.get('prompt', 'default').replace('\n', ' ')
+    logger.info(f"  Prompt:           {prompt_snip[:50]}...")
+    
+    # Check API_passthrough for temp
+    api_pass = active_conf.get('API_passthrough', {})
+    logger.info(f"  Temperature:      {api_pass.get('temperature', 'default')}")
+    
+    logger.info("-" * 40)
+    logger.info("Preprocessing Settings:")
+    prep = trans_conf.get('preprocessing', {})
+    if not prep or all(v is False for v in prep.values()):
+        logger.info("  (None or Defaults)")
+    else:
+        for k, v in prep.items():
+            logger.info(f"  {k}: {v}")
+    logger.info("="*60)
+    
     logger.info(f"Processing {len(input_files)} files...")
 
     # Pipeline Loop
@@ -256,19 +323,43 @@ def main():
         
         try:
             # 1. Segmentation
-            seg_start = time.time()
-            regions = segmentation_engine.analyze(image_path, config)
-            seg_duration = time.time() - seg_start
+            if args.onlypdf:
+                # SKIP Segmentation and Transcription
+                # Determine XML path
+                # Try 1: Next to image (input dir)
+                base_name = os.path.splitext(os.path.basename(image_path))[0]
+                xml_path = os.path.splitext(image_path)[0] + ".xml"
+                
+                if not os.path.exists(xml_path):
+                    # Try 2: Output dir
+                    xml_path = os.path.join(config.get('output_dir', 'output'), f"{base_name}.xml")
+                    
+                if not os.path.exists(xml_path):
+                    logger.error(f"XML file not found for --onlypdf mode. Checked:\n  {os.path.splitext(image_path)[0]}.xml\n  {xml_path}")
+                    continue
+                    
+                logger.info(f"Using existing XML: {xml_path}")
+                regions = output_engine.parse_xml_regions(xml_path)
+                usage = {} # No usage
+                seg_duration = 0
+                trans_duration = 0
+                
+            else:
+                # Normal Flow
+                seg_start = time.time()
+                regions = segmentation_engine.analyze(image_path, config)
+                seg_duration = time.time() - seg_start
             
             # 2. Transcription
-            trans_start = time.time()
-            from PIL import Image
-            with Image.open(image_path) as im:
-                # Pass effective_config which contains the selected model settings
-                # Inject image_path for output naming
-                effective_config['image_path'] = image_path
-                regions, usage = transcription_engine.transcribe(im, regions, effective_config)
-            trans_duration = time.time() - trans_start
+            if not args.onlypdf:
+                trans_start = time.time()
+                from PIL import Image
+                with Image.open(image_path) as im:
+                    # Pass effective_config which contains the selected model settings
+                    # Inject image_path for output naming
+                    effective_config['image_path'] = image_path
+                    regions, usage = transcription_engine.transcribe(im, regions, effective_config)
+                trans_duration = time.time() - trans_start
             
             # 3. Output Generation
             out_start = time.time()

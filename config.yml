@@ -16,7 +16,7 @@ segmentation:
 
 # --- Transcription ---
 transcription:
-  default_model: "gemini-pro-3"
+  default_model: "gemini-flash-3"
   
   # Image Preprocessing Settings
   preprocessing:
@@ -41,6 +41,25 @@ transcription:
       cost_config:
         input_token_cost: 2.0
         output_token_cost: 12.0
+      API_passthrough: # provide model-specific settings here
+        temperature: 0.8
+        max_output_tokens: 65535
+        top_p: 0.95
+        top_k: 64
+
+    gemini-flash-3:
+      provider: "gemini"
+      model: "gemini-3-flash-preview"
+      prompt: |
+        You are a literal transcription engine for 19th-century handwritten manuscripts. Extract text from the 
+        supplied image exactly as written. Output only the transcribed text, with no commentary, no preamble, 
+        no markdown, and no generated text after the transcription. Preserve all original spelling, punctuation, 
+        capitalization, and line breaks. Do not modernize, interpret, or expand abbreviations. Output begins 
+        immediately with the first character of the transcription and ends immediately after the last character 
+        of transcription.
+      cost_config:
+        input_token_cost: 0.50
+        output_token_cost: 3.0
       API_passthrough: # provide model-specific settings here
         temperature: 0.8
         max_output_tokens: 65535

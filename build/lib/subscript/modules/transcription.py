@@ -4,8 +4,10 @@ import json
 import re
 from typing import List, Dict, Any
 from PIL import Image, ImageDraw, ImageFont
-import google.generativeai as genai
-from modules.interfaces import TranscriptionEngine
+from google import genai
+from google.genai import types
+from pydantic import BaseModel
+from .interfaces import TranscriptionEngine
 
 logger = logging.getLogger(__name__)
 
@@ -65,12 +67,6 @@ def preprocess_image(image: Image.Image, config: Dict[str, Any]) -> Image.Image:
             logger.info(f"Resized image to {new_size}")
 
     # 2. Grayscale (Required for binarization, or if requested)
-    # We'll convert to grayscale if binarize is on, or if contrast is applied (usually better on L)
-    # But let's stick to user request: "if that is required for binarization, then just make that a multistep conversion"
-    # We will convert to 'L' if binarize is True.
-    # If just contrast/invert, we can keep RGB or convert. 
-    # Usually HTR models work fine with RGB, but 'L' is safer for processing.
-    # Let's convert to 'L' if binarize is True.
     if prep_config.get('binarize', False):
          if image.mode != 'L':
              image = image.convert('L')
@@ -104,20 +100,29 @@ def preprocess_image(image: Image.Image, config: Dict[str, Any]) -> Image.Image:
         
     return image
 
+# --- Schema Definitions ---
+class TranscriptionBox(BaseModel):
+    id: str
+    content: str
+
+class PageTranscription(BaseModel):
+    boxes: List[TranscriptionBox]
+
+
 class GeminiTranscription(TranscriptionEngine):
     def __init__(self):
-        api_key = os.environ.get("GEMINI_API_KEY")
-        if not api_key:
+        self.api_key = os.environ.get("GEMINI_API_KEY")
+        if not self.api_key:
             raise ValueError("GEMINI_API_KEY environment variable not set.")
-        genai.configure(api_key=api_key)
+        # Initialize Client
+        self.client = genai.Client(api_key=self.api_key)
 
     def transcribe(self, image: Image.Image, regions: List[Dict[str, Any]], config: Dict[str, Any]) -> tuple[List[Dict[str, Any]], Dict[str, int]]:
         gemini_config = config.get('transcription', {}).get('gemini', {})
         model_name = gemini_config.get('model', 'gemini-1.5-pro')
         base_prompt = gemini_config.get('prompt', 'Transcribe this text.')
         
-        logger.info(f"Initializing Gemini model: {model_name}")
-        model = genai.GenerativeModel(model_name)
+        logger.info(f"Using Gemini model (google.genai): {model_name}")
         
         # 0. Preprocess Image
         image = preprocess_image(image, config)
@@ -165,51 +170,55 @@ class GeminiTranscription(TranscriptionEngine):
             annotated_image.save(debug_path)
             logger.info(f"Saved debug image to {debug_path}")
 
-        # 2. Construct Prompt
-        system_prompt = (
-            "You are an expert transcription system. "
+        # 2. Construct Prompt (Simplified for Structured Output)
+        sys_instr = (
+            "You are an expert image analysis system. "
             "I have annotated the image with red boxes and numbered labels (1, 2, 3...).\n"
-            "Your task is to transcribe the text inside each numbered box.\n"
-            "Return the output as a JSON object where keys are the box numbers (as strings) and values are the transcribed text.\n"
-            "Example: {\"1\": \"Text in box 1\", \"2\": \"Text in box 2\"}\n"
-            "Do not include any markdown formatting (like ```json). Just the raw JSON string."
+            "Process the content of each box according to the user's instructions.\n"
+            "The output must strictly follow the schema."
         )
         
-        full_prompt = [system_prompt, base_prompt, annotated_image]
-        
         # 3. Call Gemini
-        logger.info("Sending annotated image to Gemini...")
+        logger.info(f"Sending annotated image to Gemini (Structured Output). User Prompt: '{base_prompt}'")
         try:
             # Load generation config from settings
             user_gen_config = gemini_config.get('API_passthrough', {})
             
             # Ensure critical settings are preserved/set
-            # We enforce JSON output for this pipeline to work
             user_gen_config['response_mime_type'] = "application/json"
+            user_gen_config['response_schema'] = PageTranscription
+            user_gen_config['system_instruction'] = sys_instr
             
             # Set default temperature if not provided
             if 'temperature' not in user_gen_config:
                 user_gen_config['temperature'] = 0.0
                 
-            # Unpack into GenerationConfig
-            gen_config = genai.types.GenerationConfig(**user_gen_config)
+            # Create Config Object using new types
+            gen_config = types.GenerateContentConfig(**user_gen_config)
             
-            response = model.generate_content(
-                full_prompt,
-                generation_config=gen_config
+            # Pass contents as list of [base_prompt, image]
+            # Prompt first seems to work better for instructions like "Translate" or "Format Dates"
+            contents_list = [base_prompt, annotated_image]
+
+            response = self.client.models.generate_content(
+                model=model_name,
+                contents=contents_list,
+                config=gen_config
             )
             
-            raw_text = response.text.strip()
-            # Clean up potential markdown code blocks if the model ignores the instruction
-            if raw_text.startswith("```json"):
-                raw_text = raw_text[7:]
-            if raw_text.endswith("```"):
-                raw_text = raw_text[:-3]
-                
-            transcription_map = json.loads(raw_text)
-            logger.info("Received JSON response from Gemini.")
+            # 4. Parse Structured Output
+            if not response.parsed:
+                 logger.error("Gemini response was empty or did not contain parsed object.")
+                 parsed_boxes = []
+            else:
+                 parsed_boxes = response.parsed.boxes
+
+            logger.info(f"Received structured response for {len(parsed_boxes)} boxes.")
             
-            # 4. Map Back to Regions
+            # Convert list to map for easy lookup
+            transcription_map = {box.id: box.content for box in parsed_boxes}
+            
+            # 5. Map Back to Regions
             for region in regions:
                 visual_id = str(region['visual_id'])
                 if visual_id in transcription_map:
@@ -219,10 +228,18 @@ class GeminiTranscription(TranscriptionEngine):
                     region['text'] = ""
             
             # Extract usage metadata
+            # Check structure of usage_metadata in new SDK (it might vary, wrap in try/get)
+            p_tok = 0
+            c_tok = 0
+            if response.usage_metadata:
+                 p_tok = response.usage_metadata.prompt_token_count or 0
+                 c_tok = response.usage_metadata.candidates_token_count or 0
+
             usage_metadata = {
-                'prompt_token_count': response.usage_metadata.prompt_token_count,
-                'candidates_token_count': response.usage_metadata.candidates_token_count
+                'prompt_token_count': p_tok,
+                'candidates_token_count': c_tok
             }
+            logger.info(f"Gemini Usage: {usage_metadata}")
                     
         except Exception as e:
             logger.error(f"Gemini Transcription Failed: {e}")

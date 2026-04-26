@@ -2,7 +2,7 @@ import logging
 import os
 from PIL import Image
 from typing import List, Dict, Any
-from modules.interfaces import SegmentationEngine
+from .interfaces import SegmentationEngine
 
 # Try importing kraken, handle missing dependency gracefully
 try:
